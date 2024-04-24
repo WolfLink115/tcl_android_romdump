@@ -1,0 +1,23 @@
+on post-fs-data
+    mkdir /data/vendor/audiohal 0771 system audio
+    setprop vendor.ril.audio.iccid none
+    rm /oempersist/audio/audio_param_current
+
+service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service.mediatek
+    class hal
+    user audioserver
+    # media gid needed for /dev/fm (radio) and for /data/misc/media (tee)
+    group audio camera drmrpc inet media mediadrm net_bt net_bt_admin net_bw_acct wakelock system sdcard_rw
+    capabilities BLOCK_SUSPEND SYS_NICE
+    ioprio rt 4
+    task_profiles ProcessCapacityHigh HighPerformance
+
+#BEGIN dynamic replace gflip6 tf audio parameter
+on property:vendor.ril.audio.iccid=absent && property:ro.product.model=T408DL
+    wait /oempersist/audio 10
+    symlink /oempersist/audio/audio_param_default /oempersist/audio/audio_param_current
+
+on property:vendor.ril.audio.iccid=898602A && property:ro.product.model=T408DL
+    wait /oempersist/audio 10
+    symlink /oempersist/audio/audio_param_tf_tmo /oempersist/audio/audio_param_current
+#BEGIN dynamic replace gflip6 tf audio parameter

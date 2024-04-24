@@ -1,0 +1,8 @@
+on property:sys.boot_completed=1
+    write /proc/bootprof "start robustd"
+    restorecon robustd
+    start robustd
+service robustd /system/bin/robustd
+    class core
+    socket robustd stream 0666 root root
+    seclabel u:r:robustd:s0

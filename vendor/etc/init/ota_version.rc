@@ -1,0 +1,3 @@
+on property:dev.bootcomplete=1
+    write /proc/bootprof "INIT:ota_version start"
+    exec - root -- /vendor/bin/ota_version

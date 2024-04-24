@@ -1,0 +1,12 @@
+#!/vendor/bin/sh
+if [ "$1" == "1" ];
+then
+	echo -n "000000000000" | dd of=/dev/block/platform/bootdevice/by-name/oembin seek=30720 bs=1 conv=notrunc
+	echo -e "\nOpen eMMC write protect\nNow reboot your device for settings to take effect"
+elif [ "$1" == "0" ];
+then
+	echo -n "DISABLE_POWP" | dd of=/dev/block/platform/bootdevice/by-name/oembin seek=30720 bs=1 conv=notrunc
+	echo -e "\nClose eMMC write protect\nNow reboot your device for settings to take effect"
+else
+	echo "Please input 0/1 to close/open eMMC write protect"
+fi

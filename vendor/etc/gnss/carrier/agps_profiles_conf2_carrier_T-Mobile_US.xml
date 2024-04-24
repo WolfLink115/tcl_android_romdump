@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mtk_agps_profiles maj_ver="1" min_ver="2">
+  <!-- Refer to agps_profiles_conf2.xml for values not provided in this file.
+       cur_supl_profile is supported but other supl_profile are ignored.
+       auto_profile_enable is not supported.
+  -->
+
+  <cur_supl_profile name="T-Mobile_US"
+      addr="supl.geo.t-mobile.com"
+      port="7275"
+      tls="true"
+      tls_version="2"
+  />
+
+  <cdma_profile name="CDMA1"
+  />
+
+  <agps_setting
+    ignore_si_for_e911="true"
+  />
+
+  <gnss_setting
+    a_glonass_satellite_enable="false"
+    a_beidou_satellite_enable="false"
+    a_galileo_satellite_enable="false"
+  />
+
+  <!-- nlp_profile
+    name:
+        NLP vendor name
+    package_name:
+        NLP apk package name
+    [PR]Add com.skyhookwireless.provider by weizhen.pang@tcl.com,20220119,GF6TMO-8741
+  -->
+  <nlp_profile name="Skyhook"
+      package_name="com.skyhookwireless.provider"
+  />
+
+  <cp_setting
+  />
+
+  <up_setting
+    ca_enable="true"
+  />
+
+</mtk_agps_profiles>

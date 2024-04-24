@@ -1,0 +1,16 @@
+
+on post-fs
+    # TCT oempersist
+    # DO NOT mount oempersist via fstab, since GSI don't have the mount point.
+    mount ext4 /dev/block/by-name/oempersist /oempersist noatime nosuid nodev commit=1
+
+    chown system system /oempersist
+    chmod 0775 /oempersist
+
+    mkdir /oempersist/tct_call_data 0770 system system
+    #set xxx5 so that radio group can read it.
+    mkdir /oempersist/apn_info 0775 system system
+    mkdir /oempersist/lostmode 0770 system system
+
+    #GF6-3661 for omadm
+    mkdir /oempersist/omadm 0770 system system

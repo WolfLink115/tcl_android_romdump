@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <component-override package="com.android.mmitest" >
+        <component class="com.android.mmitest.receiver.BootCompleteReceiver" enabled="true" />
+    </component-override>
+</config>
+
+

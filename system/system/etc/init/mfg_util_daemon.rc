@@ -1,0 +1,35 @@
+#begin: add by hui.xiang for hdt2 feature
+service mfg_utild /system/bin/mfg_utild
+    disabled
+    user root
+    group root system
+    socket mfgutil seqpacket  0666 system system
+
+on property:ro.boot.inproductionflag=true
+    start mfg_utild
+
+on property:ro.boot.inproductionflag=true
+    setprop persist.sys.usb.config adb
+    setprop sys.usb.config adb
+#end: add by hui.xiang for hdt2 feature
+#begin: add by hui.xiang for hdt2 feature
+service dc_poweroff /vendor/bin/dc_poweroff
+    disabled
+    user root
+    group root system
+
+on property:vendor.debug.dc_poweroff=true
+    start dc_poweroff
+
+#end: add by hui.xiang for hdt2 feature
+
+#GF6TMO-9386 add for clear_inproductionflag by wangxiuqin on 20220223 begin
+service clear_inproductionflag /system/bin/clear_inproductionflag
+    disabled
+    user root
+    group root system
+
+on property:persist.sys.clear_inproductionflag=true
+    start clear_inproductionflag
+    setprop persist.sys.clear_inproductionflag false
+#GF6TMO-9386 add for clear_inproductionflag by wangxiuqin on 20220223 end

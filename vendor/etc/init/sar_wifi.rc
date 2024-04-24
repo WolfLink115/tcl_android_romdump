@@ -1,0 +1,47 @@
+#sys.rf.sar.status=4, there is no wifi sar requirement
+#sys.rf.sar.status=1, wifi station mode
+#sys.rf.sar.status=3, wifi hotspot mode
+
+service wifi_default_power /vendor/bin/iwpriv_system wlan0 set_txpower 4 0
+    class main
+    disabled
+    oneshot
+
+service wifi_sar0 /vendor/bin/iwpriv_system wlan0 set_txpower 2 0 31
+    class main
+    disabled
+    oneshot
+
+service wifi_sar1 /vendor/bin/iwpriv_system wlan0 set_txpower 2 0 37
+    class main
+    disabled
+    oneshot
+
+#wifi only
+on property:sys.rf.sar.status=1 && property:vendor.headset.wifi.sar=0 && property:sys.rf.sar.datalink=0
+    start wifi_default_power
+
+#wifi and receiver
+on property:sys.rf.sar.status=1 && property:vendor.headset.wifi.sar=1 && property:sys.rf.sar.datalink=0
+    start wifi_sar1
+
+#wifi and receiver and mobile data
+on property:sys.rf.sar.status=1 && property:vendor.headset.wifi.sar=1 && property:sys.rf.sar.datalink=1
+    start wifi_sar0
+
+#wifi hotspot only
+on property:sys.rf.sar.status=3 && property:vendor.headset.wifi.sar=0
+    start wifi_default_power
+
+#wifi hotspot and receiver
+on property:sys.rf.sar.status=3 && property:vendor.headset.wifi.sar=1 && property:sys.rf.sar.datalink=0
+    start wifi_sar1
+
+#wifi hotspot and receiver and mobile data
+on property:sys.rf.sar.status=3 && property:vendor.headset.wifi.sar=1 && property:sys.rf.sar.datalink=1
+    start wifi_sar0
+
+on boot
+    setprop sys.rf.sar.datalink 0
+    setprop vendor.headset.wifi.sar 0
+

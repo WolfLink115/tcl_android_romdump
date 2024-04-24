@@ -1,0 +1,8 @@
+<exceptions>
+    <exception package="com.android.contacts">
+        <!-- Location permission -->
+        <permission name="android.permission.READ_SMS" fixed="false" />
+	<permission name="android.permission.READ_EXTERNAL_STORAGE" fixed="false"/>
+	<permission name="android.permission.WRITE_EXTERNAL_STORAGE" fixed="false"/>
+    </exception>
+</exceptions>

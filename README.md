@@ -1,0 +1,20 @@
+## T408DL-user 11 RP1A.200720.011 KEFH release-keys
+- Manufacturer: tcl
+- Platform: mt6739
+- Codename: Gflip6_TF
+- Brand: TCL
+- Flavor: T408DL-user
+- Release Version: 11
+- Kernel Version: 4.14.186
+- Id: RP1A.200720.011
+- Incremental: KEFH
+- Tags: release-keys
+- CPU Abilist: armeabi-v7a,armeabi
+- A/B Device: false
+- Treble Device: true
+- Locale: en-US
+- Screen Density: 320
+- Fingerprint: TCL/T408DL/Gflip6_TF:11/RP1A.200720.011/KEFH:user/release-keys
+- OTA version: 
+- Branch: T408DL-user-11-RP1A.200720.011-KEFH-release-keys
+- Repo: tcl_gflip6_tf_dump

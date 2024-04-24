@@ -1,0 +1,11 @@
+
+on post-fs
+    #wait /dev/block/bootdevice/by-name/otapkg
+    mount ext4 /dev/block/by-name/otapkg /otapkg noatime nosuid nodev barrier=1
+    chown system system /otapkg
+    chmod 0775 /otapkg
+    restorecon_recursive /otapkg
+    mkdir /otapkg/cache 0771 system cache
+    mkdir /otapkg/system 0771 system system
+    mkdir /otapkg/omadm 0771 system system
+

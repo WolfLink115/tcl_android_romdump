@@ -1,0 +1,5 @@
+user=_app seinfo=platform name=com.mediatek.engineermode domain=em_app type=app_data_file levelFrom=user
+user=_app seinfo=platform name=com.mediatek.apmonitor domain=apmsrv_app type=app_data_file levelFrom=user
+user=_app seinfo=platform name=com.mediatek.capabilitytest domain=capability_app type=app_data_file levelFrom=user
+user=vendor_aiomd seinfo=platform domain=java_swoop type=swoop_data_file
+user=oem_2951 seinfo=platform domain=java_swoop type=swoop_data_file

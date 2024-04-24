@@ -1,0 +1,11 @@
+service setbarometer /vendor/bin/setbarometer
+    class main
+    user system
+    group system
+    seclabel u:r:setbarometer:s0
+    oneshot
+    disabled
+
+on property:persist.sys.sensors.barometer.setdata=true && property:sys.boot_completed=1
+    start setbarometer
+    setprop persist.sys.sensors.barometer.setdata false

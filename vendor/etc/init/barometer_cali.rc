@@ -1,0 +1,18 @@
+
+service barometer_cali /vendor/bin/barometer_cali
+    user system
+    group system
+    class core
+    oneshot
+    
+on post-fs
+     chown system system /mnt/vendor/persist
+     chmod 0771 /mnt/vendor/persist
+ 
+     # We restorecon /mnt/vendor/persist to set SEPolicy label.
+     restorecon /mnt/vendor/persist/
+     chown system system /mnt/vendor/persist/cali.txt
+     chmod 0771 /mnt/vendor/persist
+ 
+     # We restorecon /mnt/vendor/persist to set SEPolicy label.
+     restorecon /mnt/vendor/persist/cali.txt

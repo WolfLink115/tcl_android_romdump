@@ -1,0 +1,12 @@
+service tct_tokend /system/bin/tct_tokend
+    disabled
+    user root
+    group root system
+    socket tct_tokend seqpacket 0660 system system
+    seclabel u:r:tct_tokend:s0
+
+on property:ro.hw.tcttokend=true
+    start tct_tokend
+
+on property:ro.boot.inproductionflag=true
+    start tct_tokend

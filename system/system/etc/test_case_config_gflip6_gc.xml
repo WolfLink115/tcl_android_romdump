@@ -1,0 +1,1764 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+macros define
+
+name: the name of test case.
+      Use uppercase for all letters and the delimiter is "_", must same as defined in string.xml.
+
+auto: true[auto test mode have this test case]
+      false[auto test mode not have this test case].
+
+auto2: true[auto2 test mode have this test case]
+       false[auto2 test mode not have this test case].
+
+cuEnabled: true[CU build have this test case]
+           false[CU build not have this test case].
+
+miniEnabled: true[MINI build have this test case]
+             false[MINI build not have this test case].
+
+group: the similar function will implemente in the same class,
+       For example, the group of the horizontal adb vertical TouchPanel is same, will distinguish by the 'type' which defined in parameters
+
+support_key: a property
+support_valuelist: supported variant
+      define the item is supported or not in the same product but different variant, like HAC/ESIM, it is higher priority than cuEnabled and miniEnabled,
+      If the support_valuelist does't contains the support_key value, the item is not supported, if you not define it, default is support.
+
+adbKeyCode: use command "adb shell input keyevent [adbKeyCode]" to call TestCase in MainScreen.
+            The specific adbKeyCode number of every TestCase is come from factory (AUTO MMI) or after sale (SDT) requirement.
+            The default value of adbKeyCode is 0. if have multiple key, split with '/' and must same quantity as adbLogTag
+
+adbLogTag: as a TAG to print log for SDT tool.
+           The specific adbLogTag of every TestCase is come from SDT requirement.
+           The default value of adbLogTag is name. if have multiple tag, split with '/' and must same quantity as adbKeyCode
+
+adbOnly: set this item only can be started by adb keyevent
+         this item is supported if cuEnabled or miniEnabled is true, but we need hide it,
+         like some audio loop items for auto mmi, if you not define it, default is visible.
+
+parameters: only support string parameter.
+           [type]: use it to discriminate specific testcase from the same group.
+
+supplier: name param is the device model of different supplier.
+          [custom params]: custom function.
+-->
+
+<FactoryTest>
+    <!-- screen_off_timeout: optional, a integer value(unit is second), default is 0 - always keep screen on
+                             value should be same as which in "Settings - Display - Sleep"
+         show_slot_button: optional, default value is true(only active for MTK platform). It controls visibility of slot button on main screen.
+         show_wifi_button: optional, default value is false. If true, MainScreen will show a button to launch WIFI APK(wireless connection used for tmc)
+         device_type: optional, default value is "phone", available values: "phone", "tablet"
+         enable_click_keymapping: optional, default value is false, which enables UI left/right button click mapping with keycode
+                                  usually, this will used for feature phone, like Gflip6, which don't have touch panel
+         click_keymapping_left: optional, default value is 1, which is used when enable_click_keymapping is true
+         click_keymapping_right: optional, default value is 2, which is used when enable_click_keymapping is true
+    -->
+    <GlobalSettings
+        screen_off_timeout="300"
+        show_slot_button="false"
+        show_wifi_button="false"
+        device_type="phone"
+        enable_click_keymapping="true"
+        click_keymapping_left="293"
+        click_keymapping_right="26"
+        >
+    </GlobalSettings>
+
+    <TestCase
+        name="TRACEABILITY"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Traceability"
+        adbKeyCode="5006;5007"
+        adbLogTag="TRACEABILITY;WRITE_TRACEABILITY">
+        <parameters>
+            <string name="type">traceability</string>
+            <string name="flags">PT;PFT;WIFI;MMI;FT;BarometerCali;KPH;</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="TRACEABILITY_WRITE"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly = "true"
+        group="Traceability"
+        adbKeyCode="5007"
+        adbLogTag="WRITE_TRACEABILITY">
+        <parameters>
+            <string name="type">traceability</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="INFRARED"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Infrared"
+        adbKeyCode="6022"
+        adbLogTag="IR">
+    </TestCase>
+
+    <TestCase
+        name="SPEAKER_CALIBRATION"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="SpeakerCali"
+        adbKeyCode="1152"
+        adbLogTag="SMARTPA_CAL">
+        <limits>
+            <limit
+                name="reRange"
+                min="6.120"
+                max="8.280"/>
+        </limits>
+    </TestCase>
+
+    <TestCase
+        name="SPEAKER_BOX"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="SpeakBox"
+        adbKeyCode="1153"
+        adbLogTag="SPEAKER_BOX">
+        <limits>
+            <limit
+                name="f0Range"
+                min="765"
+                max="935"/>
+        </limits>
+    </TestCase>
+
+    <TestCase
+        name="FINGERPRINT"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Fingerprint"
+        adbKeyCode="6018"
+        adbLogTag="FINGERPRINT">
+        <supplier name ="FOCAL">
+            <string name="pkgName">com.focaltech.fingerprint</string>
+            <string name="className">com.focaltech.fingerprint.activity.FingerprintMainActivity</string>
+        </supplier>
+        <supplier name ="GOODIX">
+            <string name="pkgName">com.goodix.gftest</string>
+            <string name="className">com.goodix.gftest.HomeActivity</string>
+        </supplier>
+    </TestCase>
+
+    <TestCase
+        name="TP_RAWDATA"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="TpRawdata"
+        adbKeyCode="4003"
+        adbLogTag="RAWDATA">
+        <supplier name ="NT36525BH:TDT">
+            <string name="test_type">readfile</string>
+            <string name="file_name">/proc/tct/nvt_selftest</string>
+            <string name="expected_result">FW Version: 4Short Test PASS!Open Test PASS!FW Rawdata Test PASS!Noise Test PASS!</string>
+        </supplier>
+        <supplier name ="FT5446:TDT">
+            <string name="test_type">thirdapk</string>
+            <string name="package_name">com.focaltech.ft_terminal_test</string>
+            <string name="class_name">com.focaltech.ft_terminal_test.MainActivity</string>
+            <string name="intent">{command,1};{view,1};{autoFinish,1};{delay,0};{reTry,0}</string>
+            <string name="broadcast_action_name">com.focaltech.ft_terminal_test</string>
+            <string name="return_type">long</string>
+        </supplier>
+        <supplier name ="GT1151QM:LCE">
+            <string name="test_type">thirdapk</string>
+            <string name="intent_action">android.intent.action.MAIN</string>
+            <string name="package_name">com.goodix.rawdata</string>
+            <string name="class_name">com.goodix.rawdata.RawDataTest</string>
+            <string name="intent">{command,1};{frequences,1};{autofinish,true};{successfinish,true};{inidir,system/etc/};{resultdir,sdcard/Rawdata/}</string>
+            <string name="broadcast_action_name">android.intent.action.goodix</string>
+            <string name="return_type">int</string>
+        </supplier>
+    </TestCase>
+
+    <TestCase
+        name="CHECK_TUNNING"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="CheckTunning"
+        adbKeyCode="0"
+        adbLogTag="CHECK_TUNNING">
+    </TestCase>
+
+    <!--line_num: how much yellow lines-->
+    <!--margin_Top: how much pixel the top line margin top-->
+    <!--margin_Bottom: how much pixel the bottom line margin bottom-->
+    <!--width: how much width of the yellow, if the value is 0, will equal division by apk-->
+    <TestCase
+        name="TOUCH_PANEL_HORIZONTAL"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="TouchPanel"
+        adbKeyCode="4002"
+        adbLogTag="TP3">
+        <parameters>
+            <string name="type">horizontal</string>
+            <string name="line_num">4</string>
+            <string name="margin_Top">0</string>
+            <string name="margin_Bottom">0</string>
+            <string name="width">100</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="TOUCH_PANEL_VERTICAL"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="TouchPanel"
+        adbKeyCode="4000"
+        adbLogTag="TP1">
+        <parameters>
+            <string name="type">vertical</string>
+            <string name="line_num">3</string>
+            <string name="margin_Left">0</string>
+            <string name="margin_Right">0</string>
+            <string name="width">100</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="TOUCH_PANEL_CROSS"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="TouchPanel"
+        adbKeyCode="4001"
+        adbLogTag="TP2">
+        <parameters>
+            <string name="type">cross</string>
+            <string name="width">0</string>
+            <!-- Param minimum_length is optional, default value is (diagonal line length - 100) -->
+            <!--string name="minimum_length">2466</string-->
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="TPLOCKTEST"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="TpLock"
+        adbKeyCode="4007"
+        adbLogTag="TPLOCK">
+    </TestCase>
+
+    <TestCase
+        name="LCD_RGB"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Lcd"
+        adbKeyCode="2000"
+        adbLogTag="LCD_RGB">
+        <parameters>
+            <string name="type">rgb</string>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the lcd
+                 backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">0.4</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LCD_BLACK"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Lcd"
+        adbKeyCode="2001"
+        adbLogTag="LCD_BLACK">
+        <parameters>
+            <string name="type">color</string>
+            <string name="color">#000000</string>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the lcd
+                 backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">0.4</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LCD_GRAY"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Lcd"
+        adbKeyCode="2003"
+        adbLogTag="LCD_GRAYCHART">
+        <parameters>
+            <string name="type">color</string>
+            <string name="color">#808080</string>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the lcd
+                 backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">0.4</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LCD_GRAYLEVEL"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Lcd"
+        adbKeyCode="2004"
+        adbLogTag="LCD_GRAYLEVEL">
+        <parameters>
+            <string name="type">graylevel</string>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the lcd
+                 backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">0.4</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LCD_WHITE"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Lcd"
+        adbKeyCode="2002"
+        adbLogTag="LCD_WHITE">
+        <parameters>
+            <string name="type">color</string>
+            <string name="color">#FFFFFF</string>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the lcd
+                 backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">0.4</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="SUB_LCD_RGB"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="SubLCD"
+        adbKeyCode="2005"
+        adbLogTag="SUB_LCD_RGB">
+        <parameters>
+            <string name="type">rgb</string>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the lcd
+                 backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">0.4</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="SUB_LCD_WHITE"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="SubLCD"
+        adbKeyCode="2009"
+        adbLogTag="SUB_LCD_RGB">
+        <parameters>
+             <string name="type">color</string>
+             <string name="color">#FFFFFF</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LCD_MURA"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Lcd"
+        adbKeyCode="5018"
+        adbLogTag="LCD_MURA">
+        <parameters>
+            <string name="type">color</string>
+            <string name="color">#FFFFE5</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LCD_AOD"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="LcdAOD"
+        adbKeyCode="5019"
+        adbLogTag="LCD_AOD">
+        <parameters>
+            <string name="aod_mode_ctrl_file">/sys/devices/platform/soc/soc:qcom,dsi-display/lp1_enable</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LCD_FPS"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="LcdFPS"
+        adbKeyCode="0"
+        adbLogTag="">
+    </TestCase>
+
+    <TestCase
+        name="LCD_BACKLIGHT_LEAKAGE"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="LightSensorLeak"
+        adbKeyCode="9032"
+        adbLogTag="LCD_BACKLIGHT_LEAKAGE">
+    </TestCase>
+
+    <TestCase
+        name="KEYPAD"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="KeyPad"
+        adbKeyCode="6003"
+        adbLogTag="KEYPAD">
+        <parameters>
+            <!-- define keyboard key codes here
+            name of string  : key name, user can define a string except "placeholder". if name is
+                              "placeholder", then it's a dummy key and will be invisible on UI. it's
+                              only used to make UI more nice
+            value of string : key code, if name is "placeholder", the the value can be any integer
+                              values, like -1,-2,1,2,3...
+            Note that: There are at most four key buttons showing on UI at a row.-->
+            <string name="Speaker">293</string>
+            <string name="up">19</string>
+            <string name="on/off">26</string>
+            <string name="placeholder">-1</string>
+
+            <string name="L">21</string>
+            <string name="R">22</string>
+            <string name="placeholder">-1</string>
+            <string name="VOL UP">24</string>
+
+            <string name="Back">4</string>
+            <string name="Down">20</string>
+            <string name="OK">66</string>
+            <string name="VOL DN">25</string>
+
+            <string name="1">8</string>
+            <string name="2">9</string>
+            <string name="3">10</string>
+            <string name="placeholder">-1</string>
+
+            <string name="4">11</string>
+            <string name="5">12</string>
+            <string name="6">13</string>
+            <string name="placeholder">-1</string>
+
+            <string name="7">14</string>
+            <string name="8">15</string>
+            <string name="9">16</string>
+            <string name="placeholder">-1</string>
+
+            <string name="*">17</string>
+            <string name="0">7</string>
+            <string name="#">18</string>
+            <string name="placeholder">-1</string>
+
+            <string name="placeholder">-1</string>
+            <string name="5*">259</string>
+            <string name="placeholder">-1</string>
+            <string name="placeholder">-1</string>
+        </parameters>
+    </TestCase>
+
+
+    <TestCase
+        name="LCD_BACKLIGHT"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="LcdBackLight"
+        adbKeyCode="5016"
+        adbLogTag="LCD_BACKLIGHT">
+        <parameters>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the keypad
+                backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">0.4</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="KEYBOARD_BACKLIGHT"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="KeypadBackLight"
+        adbKeyCode="2320"
+        adbLogTag="KEYPAD_LIGHT">
+        <parameters>
+            <!-- param brightness_ratio is optional, default value is 1.0. this param define the keypad
+                backlight. 0 to 1 adjusts the brightness from dark to full bright   -->
+            <string name="brightness_ratio">1.0</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="FRONT_CAMERA"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Camera"
+        adbKeyCode="2100"
+        adbLogTag="FRONT_CAMERA">
+        <parameters>
+            <string name="camera_id">1</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="MAIN_CAMERA"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Camera"
+        adbKeyCode="2102"
+        adbLogTag="BACK_MAIN_CAMERA">
+        <parameters>
+            <string name="camera_id">0</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="DEPTH_CAMERA"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Camera"
+        adbKeyCode="2116"
+        adbLogTag="BACK_DEPTH_CAMERA">
+        <parameters>
+            <string name="camera_id">2</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="WIDE_CAMERA"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Camera"
+        adbKeyCode="2115"
+        adbLogTag="BACK_WIDE_CAMERA">
+        <parameters>
+            <string name="camera_id">3</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="MACRO_CAMERA"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Camera"
+        adbKeyCode="2118"
+        adbLogTag="BACK_MACRO_CAMERA">
+        <parameters>
+            <string name="camera_id">6</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="CAMERA_OTP"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="CameraOtp"
+        adbKeyCode="2109"
+        adbLogTag="CAMERAOTP">
+        <parameters>
+            <string name="type">otp</string>
+            <string name="number">2</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="CAMERA_LED"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Led"
+        adbKeyCode="2301/2324"
+        adbLogTag="CAMERA_FLASHER_MAIN1/CAMERA_FLASHER_MAIN2">
+        <parameters>
+            <string name="type">camera_led</string>
+            <string name="number">1</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="CHARGER_LED"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Led"
+        adbKeyCode="2300"
+        adbLogTag="CHARGER_LED">
+        <parameters>
+            <string name="type">charger_led</string>
+            <!-- When file_name is defined here, MMITest will use file_name to control LED ON/OFF.
+              Otherwise, MMITest will use setChargeLedLightBrightness to control LED ON/OFF. -->
+            <!-- <string name="file_name">/sys/class/leds/red/brightness</string>-->
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="HALL"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Hall"
+        adbKeyCode="6006"
+        adbLogTag="HALL">
+        <parameters>
+            <!-- param key_code is optional, if not defined here, it will use 294 as default key_code.
+             If define more than one key code here, then the PASS condition is all key code down/up is received-->
+            <string name="key_code">290</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="RECEIVER_TOP"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Audio"
+        adbKeyCode="1000;1001"
+        adbLogTag="RECEIVER;RECEIVER112">
+        <parameters>
+            <string name="type">receiver_top</string>
+            <string name="volume">13</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="RECEIVER_BTM"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Audio"
+        adbKeyCode="1050;1051"
+        adbLogTag="RECEIVER2;RECEIVER2112">
+        <parameters>
+            <string name="type">receiver_btm</string>
+            <string name="volume">13</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="SPEAKER_TOP"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Audio"
+        adbKeyCode="1150;1151"
+        adbLogTag="SPEAKER2;SPEAKER2112">
+        <parameters>
+            <string name="type">speaker_top</string>
+            <string name="volume">13</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="SPEAKER_BTM"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Audio"
+        adbKeyCode="1100;1101"
+        adbLogTag="SPEAKER;SPEAKER112">
+        <parameters>
+            <string name="type">speaker_btm</string>
+            <string name="volume">13</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="RINGTONE"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="RingTone"
+        adbKeyCode="5017"
+        adbLogTag="RINGTONE">
+    </TestCase>
+
+    <!-- Loopback -->
+    <TestCase
+        name="BTMMIC2TOPRCV_LOOPBACK"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="MicLoopBack"
+        adbKeyCode="1202"
+        adbLogTag="MICTORECEIVER">
+        <parameters>
+            <string name="type">btmMic2topRcv</string>
+            <!-- delay is used before turn on the loop(only active for QCOM). Normally the delay is
+                required between turning off a loop and turning on another loop.
+                the unit is ms, the default value is 2000 ms when it is not defined here-->
+            <string name="delay">4000</string>
+            <!-- Param loop_open_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_open_cmd">SET_LOOPBACK_TYPE=1,1,5,1,0,8,3,3</string>
+            <!-- Param loop_close_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_close_cmd">SET_LOOPBACK_TYPE=0,0</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="TOPMIC2BTMRCV_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="1254"
+        adbLogTag="MIC2TORECEIVER2">
+        <parameters>
+            <string name="type">topMic2btmRcv</string>
+            <!-- delay is used before turn on the loop(only active for QCOM). Normally the delay is
+                required between turning off a loop and turning on another loop.
+                the unit is ms, the default value is 2000 ms when it is not defined here-->
+            <string name="delay">2000</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="BTMMIC2TOPSPK_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="0"
+        adbLogTag="">
+        <parameters>
+            <string name="type">btmMic2topSpk</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="TOPMIC2BTMSPK_LOOPBACK"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="MicLoopBack"
+        adbKeyCode="1252"
+        adbLogTag="MIC2TOSPEAKER">
+        <parameters>
+            <string name="type">topMic2btmSpk</string>
+            <!-- delay is used before turn on the loop(only active for QCOM). Normally the delay is
+                required between turning off a loop and turning on another loop.
+                the unit is ms, the default value is 2000 ms when it is not defined here-->
+            <string name="delay">4000</string>
+            <!-- Param loop_open_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_open_cmd">SET_LOOPBACK_TYPE=3,3,0,0,2,8,3,3</string>
+            <!-- Param loop_close_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_close_cmd">SET_LOOPBACK_TYPE=0,0</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="BTMMIC2HST_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="1201"
+        adbLogTag="MICTOHEADSET">
+        <parameters>
+            <string name="type">btmMic2Hst</string>
+            <!-- delay is used before turn on the loop(only active for QCOM). Normally the delay is
+                required between turning off a loop and turning on another loop.
+                the unit is ms, the default value is 2000 ms when it is not defined here-->
+            <string name="delay">2000</string>
+            <string name="loop_open_cmd">SET_LOOPBACK_TYPE=1,2,3,3,-1,-1,3,3</string>
+            <!-- Param loop_close_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_close_cmd">SET_LOOPBACK_TYPE=0,0</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="TOPMIC2HST_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="1250"
+        adbLogTag="MIC2TOHEADSET">
+        <parameters>
+            <string name="type">topMic2Hst</string>
+            <!-- delay is used before turn on the loop(only active for QCOM). Normally the delay is
+                required between turning off a loop and turning on another loop.
+                the unit is ms, the default value is 2000 ms when it is not defined here-->
+            <string name="delay">2000</string>
+            <string name="loop_open_cmd">SET_LOOPBACK_TYPE=3,2,3,3,-1,-1,3,3</string>
+            <!-- Param loop_close_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_close_cmd">SET_LOOPBACK_TYPE=0,0</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="HSTMIC2TOPSPK_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="1304"
+        adbLogTag="HEADSETMICTOSPEAKER2">
+        <parameters>
+            <string name="type">hstMic2topSpk</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="HSTMIC2BTMSPK_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="1302"
+        adbLogTag="HEADSETMICTOSPEAKER1">
+        <parameters>
+            <string name="type">hstMic2btmSpk</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="HSTMIC2TOPRCV_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="1301"
+        adbLogTag="HEADSETMICTORECEIVER">
+        <parameters>
+            <string name="type">hstMic2topRcv</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="HSTMIC2BTMRCV_LOOPBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicLoopBack"
+        adbKeyCode="1303"
+        adbLogTag="HEADSETMICTORECEIVER2">
+        <parameters>
+            <string name="type">hstMic2btmRcv</string>
+        </parameters>
+    </TestCase>
+
+    <!-- record -->
+    <TestCase
+        name="MAIN_MIC_RECORD"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="MicRecord"
+        adbKeyCode="1204"
+        adbLogTag="MIC1_RECORDER">
+        <parameters>
+            <string name="type">main_mic_record</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="SUB_MIC_RECORD"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="MicRecord"
+        adbKeyCode="1253"
+        adbLogTag="MIC2_RECORDER">
+        <parameters>
+            <string name="type">sub_mic_record</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="HEADSET_MIC_RECORD"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="MicRecord"
+        adbKeyCode="1310"
+        adbLogTag="HEADSET_MIC_RECORDER">
+        <parameters>
+            <string name="type">headset_mic_record</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="VIBRATOR"
+        auto="true"
+        auto2="true"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Vibrate"
+        adbKeyCode="6002"
+        adbLogTag="VIBRATOR">
+    </TestCase>
+
+    <TestCase
+        name="NFC"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Nfc"
+        adbKeyCode="6004"
+        adbLogTag="NFC">
+    </TestCase>
+
+    <TestCase
+        name="MEMORYCARD"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Storage"
+        adbKeyCode="5001"
+        adbLogTag="MEMORYCARD">
+        <parameters>
+            <string name="type">sdcard</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="USB"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Usb"
+        adbKeyCode="6000"
+        adbLogTag="USB">
+        <parameters>
+            <!-- Param type is optional, the default type is USB when not set here, available values:
+                USB: usb charge test
+                Charger: AC charger test
+                POGO_Charger: POGO charger test-->
+            <string name="type">USB</string>
+            <!-- param usb_sides is optional, default value is 1
+            1 - just test one side usb,
+            2 - need to test two side of USB, will use deviceNode UsbSideNode to get which side it is -->
+            <string name="usb_sides">1</string>
+            <!-- param extra_check is optional, default is false. when true, App will check the value
+            read from <extra_check_file> contains <extra_check_expect_value> -->
+            <string name="extra_check">false</string>
+            <string name="extra_check_file">/sys/devices/platform/soc/4e00000.ssusb/4e00000.dwc3/udc/4e00000.dwc3/current_speed</string>
+            <string name="extra_check_expect_value">super-speed</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="CHARGER"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Usb"
+        adbKeyCode="6001"
+        adbLogTag="CHARGER">
+        <parameters>
+            <!-- Param type is optional, the default type is USB when not set here, available values:
+                USB: usb charge test
+                Charger: AC charger test
+                POGO_Charger: POGO charger test-->
+            <string name="type">Charger</string>
+            <!-- param usb_sides is optional, default value is 1
+            1 - just test one side usb,
+            2 - need to test two side of USB, will use deviceNode UsbSideNode to get which side it is -->
+            <string name="usb_sides">1</string>
+        </parameters>
+        <limits>
+            <!-- current unit is uA -->
+            <limit
+                name="current_value"
+                max="1500000"
+                min="0">
+            </limit>
+        </limits>
+    </TestCase>
+
+    <TestCase
+        name="HEADSET"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Headset"
+        adbKeyCode="1300;1306"
+        adbLogTag="HEADSET_MIC_LOOP;HEADSET_PLAY">
+        <parameters>
+            <!-- volume is optional, default value is max_value*3/4 -->
+            <string name="volume">15</string>
+            <!-- param require_loop_test is an boolean optional param, default value is true -->
+            <string name="require_loop_test">true</string>
+            <!-- delay is used before turn on the loop(only active for QCOM). Normally the delay is
+                required between turning off a loop and turning on another loop.
+                the unit is ms, the default value is 2000 ms when it is not defined here-->
+            <string name="delay">2000</string>
+            <!-- Param loop_open_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_open_cmd">SET_LOOPBACK_TYPE=2,2</string>
+            <!-- Param loop_close_cmd is optional, only for MTK, you can define extended command here -->
+            <string name="loop_close_cmd">SET_LOOPBACK_TYPE=0,0</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="FM"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Fm"
+        adbKeyCode="1350"
+        adbLogTag="FM_RADIO">
+        <parameters>
+            <!-- volume is optional, default value is max_value*3/4 -->
+            <string name="volume">10</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="BAROMETER"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Barometer"
+        adbKeyCode="6029"
+        adbLogTag="BAROMETER">
+        <parameters>
+            <!-- persist_offset_file_name is used to show offset, if not define here, MMITest will not show offset to user -->
+            <string name="persist_offset_file_name">/mnt/vendor/persist/cali.txt</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="COMPASS"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Compass"
+        adbKeyCode="3003"
+        adbLogTag="COMPASS">
+    </TestCase>
+
+    <TestCase
+        name="GYROSCOPE_CALIBRATION"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Gyroscope"
+        adbKeyCode="0"
+        adbLogTag="GYROSCOPE_CALIBRATION">
+        <parameters>
+            <string name="type">GyroscopeCali</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="GYROSCOPE"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Gyroscope"
+        adbKeyCode="3004"
+        adbLogTag="GYROSCOPE">
+        <parameters>
+            <string name="type">GyroscopeTest</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="GSENSOR_CALIBRATION"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="GSensor"
+        adbKeyCode="0"
+        adbLogTag="GSENSOR_CALIBRATION">
+        <parameters>
+            <string name="type">calibration</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="G_SENSOR"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="GSensor"
+        adbKeyCode="3000"
+        adbLogTag="GSENSOR">
+        <parameters>
+            <string name="type">gsensor</string>
+        </parameters>
+    </TestCase>
+
+    <!-- sensor calibration-->
+    <TestCase
+        name="LIGHT_SENSOR_CALIBRATION"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="SensorCal"
+        adbKeyCode="9031"
+        adbLogTag="LIGHTSENSORCALI">
+        <parameters>
+            <string name="type">light_sensor_calibration</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="LIGHT_SENSOR"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="LightSensor"
+        adbKeyCode="3001"
+        adbLogTag="LIGHT_SENSOR">
+        <parameters>
+            <string name="type">light</string>
+        </parameters>
+        <limits>
+            <limit
+                name="lux"
+                max="50"
+                min="20"></limit>
+        </limits>
+    </TestCase>
+
+    <TestCase
+        name="PROXIMITY_SENSOR"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="PSensor"
+        adbKeyCode="3002"
+        adbLogTag="ALS/PS">
+        <parameters>
+            <string name="type">proximity</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="PSENSOR_RAWDATA"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="PSensor"
+        adbKeyCode="3101"
+        adbLogTag="PSENSORRAW">
+        <parameters>
+            <string name="type">psensor_rawdata</string>
+            <!-- check_calibration_result is set only when we do P-sensor calibration in production line
+             for Qualcomm. and this will only affect auto2 test
+             the default value is false -->
+            <string name="check_calibration_result">true</string>
+            <!-- rawdata_offset and rawdata_calibrated_file are used only when check_calibration_result = true !-->
+            <string name="rawdata_offset">160</string>
+            <string name="rawdata_calibrated_file">/mnt/vendor/persist/sensors/registry/registry/stk3x3x_0_platform.ps.fac_cal</string>
+        </parameters>
+        <limits>
+            <limit
+                name="rawdata"
+                max="800"
+                min="0"></limit>
+            <!-- rawdata_tolerance_after_calibration is used only when check_calibration_result = true -->
+            <limit
+                name="rawdata_tolerance_after_calibration"
+                max="50"
+                min="-50"></limit>
+        </limits>
+    </TestCase>
+
+    <TestCase
+        name="BAROMETER_SENSOR_CALIBRATION"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        adbOnly="true"
+        group="SensorCal"
+        adbKeyCode="6021"
+        adbLogTag="BAROMETERCAL">
+        <parameters>
+            <string name="type">barometer_sensor_calibration</string>
+            <string name="persist_offset_file_name">/mnt/vendor/persist/cali.txt</string>
+            <!-- runtime_offset_file_name is only required for MTK -->
+            <string name="runtime_offset_file_name">/sys/bus/platform/drivers/barometer/cali</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="DTV"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Dtv"
+        adbKeyCode="2201"
+        adbLogTag="DTV">
+    </TestCase>
+
+    <TestCase
+        name="HAC"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Hac"
+        adbKeyCode="1005"
+        adbLogTag="HAC">
+        <parameters>
+            <!-- Param hac_on_off_test is optional, default value is false. Currently only support in QCOM
+            it controls hac on/off/on/off... when hac test in case of receiver and hac sounding together,
+            this will make tester easier to judge the test result -->
+            <string name="hac_on_off_test">true</string>
+            <!-- volume is optional, default value is max_value -->
+            <string name="volume">8</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="SIM_CARD"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Sim"
+        adbKeyCode="5000"
+        adbLogTag="SIM">
+    </TestCase>
+
+    <TestCase
+        name="SAR_SENSOR"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="SarSensor"
+        adbKeyCode="3006"
+        adbLogTag="SAR_SENSOR">
+    </TestCase>
+
+    <TestCase
+        name="ESIM"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="ESim"
+        adbKeyCode="0"
+        adbLogTag="ESIM">
+    </TestCase>
+
+    <TestCase
+        name="BATTERY_TEMPERATURE"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Battery"
+        adbKeyCode="5005"
+        adbLogTag="BATTERY_TEMP">
+        <parameters>
+            <string name="type">batteryTemp</string>
+        </parameters>
+        <limits>
+            <limit
+                name="temp"
+                max="60"
+                min="-20"/>
+            <limit
+                name="level"
+                max="60"
+                min="40"/>
+            <limit
+                name="battery_id_byd"
+                max="20700"
+                min="15300"/>
+            <limit
+                name="battery_id_veken"
+                max="94300"
+                min="69700"/>
+        </limits>
+    </TestCase>
+
+    <TestCase
+        name="BLUETOOTH"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Bluetooth"
+        adbKeyCode="5002"
+        adbLogTag="BT">
+    </TestCase>
+
+    <TestCase
+        name="WIFI"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Wifi"
+        adbKeyCode="5003"
+        adbLogTag="WIFI">
+        <parameters>
+            <string name="type">2.4g</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="WIFI_5"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Wifi"
+        adbKeyCode="5015"
+        adbLogTag="5GWIFI">
+        <parameters>
+            <string name="type">5g</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="GPS"
+        auto="true"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Gps"
+        adbKeyCode="5004"
+        adbLogTag="GPS">
+    </TestCase>
+
+    <TestCase
+        name="CALL"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="true"
+        group="Call"
+        adbKeyCode="0"
+        adbLogTag="CALL">
+    </TestCase>
+
+    <TestCase
+        name="EFUSE_CHECK"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Efuse"
+        adbKeyCode="0"
+        adbLogTag="EFUSE_CHECK">
+    </TestCase>
+
+    <TestCase
+        name="MEMORY_LIFETIME"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Memory"
+        adbKeyCode="0"
+        adbLogTag="MEMORY_LIFETIME">
+        <parameters>
+            <string name="info_file">/sys/class/mmc_host/mmc0/mmc0:0001/life_time</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="KPH"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Traceability"
+        adbKeyCode="0"
+        adbLogTag="KPH">
+        <parameters>
+            <string name="type">kph</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="ATTESTATION_KEY"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Traceability"
+        adbKeyCode="0"
+        adbLogTag="ATTESTATION_KEY">
+        <parameters>
+            <string name="type">attestation_key</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="RPMB_KEY"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Traceability"
+        adbKeyCode="0"
+        adbLogTag="RPMB_KEY">
+        <parameters>
+            <string name="type">rpmb_key</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="IRIS_CALIBRATION"
+        auto="true"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Iris"
+        adbKeyCode="2006"
+        adbLogTag="IRIS">
+        <parameters>
+            <string name="type">iris_calibration</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="IRIS_CHECK"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="Iris"
+        adbKeyCode="0"
+        adbLogTag="IRIS_CHECK">
+        <parameters>
+            <string name="type">iris_check</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="HARDWARE_INFO"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="HardwareInfo"
+        adbKeyCode="0">
+        <parameters>
+            <!-- Params hereunder is optional, if there's no requirement in project, just delete it.
+                Also, you can add new params in the same format -->
+            <string name="LCD">/sys/class/deviceinfo/device_info/lcd</string>
+            <string name="TP">/sys/class/deviceinfo/device_info/ctp</string>
+            <string name="CAM">/sys/class/deviceinfo/device_info/CamNameB</string>
+            <string name="FP">/sys/class/deviceinfo/device_info/fp</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="ANTI_ROLLBACK"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="AntiRollback"
+        adbKeyCode="0">
+        <parameters>
+            <!-- Param show_secure_level is optional, default value is false.
+            This param control whether to show efuse level, which is from ro.boot.debug -->
+            <string name="show_secure_level">false</string>
+        </parameters>
+    </TestCase>
+
+    <TestCase
+        name="BATTERY_DETECTION"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="false"
+        group="BatteryDetection"
+        adbKeyCode="0">
+        <limits>
+            <limit
+                name="soc_tolerance"
+                min="-15"
+                max="15"/>
+        </limits>
+    </TestCase>
+
+    <TestCase
+        name="FACTORY_RESET"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="FactoryReset"
+        adbKeyCode="0"
+        adbLogTag="FACTORY_RESET">
+    </TestCase>
+
+    <TestCase
+        name="ROBUST"
+        auto="false"
+        auto2="false"
+        cuEnabled="false"
+        miniEnabled="true"
+        group="Robust"
+        adbKeyCode="0"
+        adbLogTag="ROBUST">
+    </TestCase>
+
+    <TestCase
+        name="EXIT"
+        auto="false"
+        auto2="false"
+        cuEnabled="true"
+        miniEnabled="true"
+        group="Exit"
+        adbKeyCode="0"
+        adbLogTag="Exit">
+    </TestCase>
+
+    <!-- ####################################################################################### -->
+    <!--
+    deviceNodes
+    name: the name of device node name , you should not change it.
+    path: the path of device node path in the device, you can customize it.
+    -->
+    <deviceNode
+        name="CamNameF"
+        path="/sys/class/deviceinfo/device_info/CamNameF" />
+
+    <deviceNode
+        name="CamNameB"
+        path="/sys/class/deviceinfo/device_info/CamNameB" />
+
+    <deviceNode
+        name="CamNameB2"
+        path="/sys/class/deviceinfo/device_info/CamNameB2" />
+
+    <deviceNode
+        name="CamNameB3"
+        path="/sys/class/deviceinfo/device_info/CamNameB3" />
+
+    <deviceNode
+        name="CamNameB4"
+        path="/sys/class/deviceinfo/device_info/CamNameB4" />
+
+    <deviceNode
+        name="CamOTPF"
+        path="/sys/class/deviceinfo/device_info/CamOTPF" />
+
+    <deviceNode
+        name="CamOTPB"
+        path="/sys/class/deviceinfo/device_info/CamOTPB" />
+
+    <deviceNode
+        name="CamOTPB2"
+        path="/sys/class/deviceinfo/device_info/CamOTPB2" />
+
+    <deviceNode
+        name="CamOTPB3"
+        path="/sys/class/deviceinfo/device_info/CamOTPB3" />
+
+    <deviceNode
+        name="CamOTPB4"
+        path="/sys/class/deviceinfo/device_info/CamOTPB4" />
+
+    <deviceNode
+        name="fp"
+        path="/sys/class/deviceinfo/device_info/fp" />
+
+    <deviceNode
+        name="PSensorNode"
+        path="/sys/bus/platform/drivers/als_ps/ps" />
+
+    <!-- TCT battery_info not ready, path="/sys/class/deviceinfo/device_info/battery_info" / -->
+    <deviceNode
+        name="battery_info"
+        path="/sys/class/deviceinfo/device_info/battery_info" />
+
+    <deviceNode
+        name="BatteryStatus"
+        path="/sys/class/power_supply/battery/status" />
+
+    <deviceNode
+        name="battery_id"
+        path="/sys/class/power_supply/battery/resistance_id"/>
+
+    <deviceNode
+        name="Battery_present_file"
+        path= "/sys/class/power_supply/battery/present" />
+
+    <deviceNode
+        name="Battery_resistance_file"
+        path= "/sys/class/power_supply/bms/resistance"/>
+
+    <deviceNode
+        name="Battery_resistance_now"
+        path= "/sys/class/power_supply/bms/resistance_now"/>
+
+
+    <deviceNode
+        name="BatteryTypeMtk"
+        path="/sys/class/power_supply/usb/type" />
+
+    <deviceNode
+        name="BatteryTypeQcom"
+        path="/sys/class/power_supply/usb/real_type" />
+
+    <deviceNode
+        name="BatteryIdValueNode"
+        path="/sys/class/power_supply/battery/resistance_id" />
+
+    <deviceNode
+        name="EfuseNode"
+        path="/sys/class/checkefuse/checkefuse/val_efuse" />
+
+    <deviceNode
+        name="BatteryCurrentNode"
+        path="/sys/devices/platform/battery_meter/FG_Current" />
+
+    <deviceNode
+        name="HdcpNode"
+        path="/persist/data/dxhdcp2/dxhdcp2/dxhdcp2.sfs" />
+
+    <deviceNode
+        name="ChargeCurrentNode"
+        path="/sys/class/power_supply/battery/current_now" />
+
+    <deviceNode
+        name="ChargeStateNode"
+        path="/sys/class/power_supply/battery/status" />
+
+    <deviceNode
+        name="BatteryCapacityNode"
+        path="/sys/class/power_supply/battery/capacity" />
+
+    <deviceNode
+        name="BatteryVoltageNode"
+        path="/sys/class/power_supply/battery/batt_vol" />
+
+    <deviceNode
+        name="ctp"
+        path="/sys/class/deviceinfo/device_info/ctp" />
+
+    <deviceNode
+        name="UsbSideNode"
+        path="/sys/class/power_supply/usb/typec_cc_orientation"/>
+
+    <deviceNode
+        name="All_SDTDeviceInfo"
+        path="/sys/class/deviceinfo/device_info/tct_all_deviceinfo"/>
+
+    <deviceNode
+        name="HallNode"
+        path="/sys/devices/virtual/hall_switch/hall_switch/hall_status" />
+
+    <deviceNode
+        name="IrisCalibrationNode"
+        path="/sys/devices/platform/soc/soc:qcom,dsi-display/panel_calibrate" />
+
+    <deviceNode
+        name="BatterySocNode"
+        path="/sys/class/power_supply/battery/soc_pl" />
+
+    <deviceNode
+        name="BatteryOcvNode"
+        path="/sys/class/power_supply/battery/ocv_pl" />
+</FactoryTest>
